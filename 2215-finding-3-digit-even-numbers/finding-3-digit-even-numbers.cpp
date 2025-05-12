@@ -1,19 +1,22 @@
 class Solution {
 public:
     vector<int> findEvenNumbers(vector<int>& A) {
-        set<int> s;
-        int N = A.size();
-        for (int i = 0; i < N; ++i) {
-            if (A[i] == 0) continue;
-            for (int j = 0; j < N; ++j) {
-                if (i == j) continue;
-                for (int k = 0; k < N; ++k) {
-                    if (k == i || k == j) continue;
-                    if (A[k] % 2) continue;
-                    s.insert(A[i] * 100 + A[j] * 10 + A[k]);
-                }
+        int cnt[10] = {};
+        for (int n : A) cnt[n]++;
+        vector<int> ans;
+        function<void(int, int)> dfs = [&](int i, int n) {
+            if (i == 3) {
+                ans.push_back(n);
+                return;
             }
-        }
-        return vector<int>(begin(s), end(s));
+            for (int d = 0; d <= 9; ++d) {
+                if (cnt[d] == 0 || (i == 0 && d == 0) || (i == 2 && d % 2)) continue;
+                cnt[d]--;
+                dfs(i + 1, n * 10 + d);
+                cnt[d]++;
+            }
+        };
+        dfs(0, 0);
+        return ans;
     }
 };
