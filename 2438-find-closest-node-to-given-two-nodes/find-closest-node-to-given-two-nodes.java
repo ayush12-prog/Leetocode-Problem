@@ -1,47 +1,26 @@
-
 class Solution {
-    private int n;
-    private List<Integer>[] g;
-
     public int closestMeetingNode(int[] edges, int node1, int node2) {
-        n = edges.length;
-        g = new List[n];
-        Arrays.setAll(g, k -> new ArrayList<>());
-        for (int i = 0; i < n; ++i) {
-            if (edges[i] != -1) {
-                g[i].add(edges[i]);
+        final int n = edges.length;
+        final Integer[] m1 = new Integer[n];
+        final Integer[] m2 = new Integer[n];
+        dfs(edges, m1, node1);
+        dfs(edges, m2, node2);
+        int index = -1;
+        int dist = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            if (m1[i] != null && m2[i] != null && dist > Math.max(m1[i], m2[i])) {
+                dist = Math.max(m1[i], m2[i]);
+                index = i;
             }
         }
-        int[] d1 = dijkstra(node1);
-        int[] d2 = dijkstra(node2);
-        int d = 1 << 30;
-        int ans = -1;
-        for (int i = 0; i < n; ++i) {
-            int t = Math.max(d1[i], d2[i]);
-            if (t < d) {
-                d = t;
-                ans = i;
-            }
-        }
-        return ans;
+        return index;
     }
 
-    private int[] dijkstra(int i) {
-        int[] dist = new int[n];
-        Arrays.fill(dist, 1 << 30);
-        dist[i] = 0;
-        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[0] - b[0]);
-        q.offer(new int[] {0, i});
-        while (!q.isEmpty()) {
-            var p = q.poll();
-            i = p[1];
-            for (int j : g[i]) {
-                if (dist[j] > dist[i] + 1) {
-                    dist[j] = dist[i] + 1;
-                    q.offer(new int[] {dist[j], j});
-                }
-            }
+    private void dfs(int[] edges, Integer[] memo, int node) {
+        int dist = 0;
+        while (node != -1 && memo[node] == null) {
+            memo[node] = dist++;
+            node = edges[node];
         }
-        return dist;
     }
 }
