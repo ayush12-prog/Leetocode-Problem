@@ -1,16 +1,11 @@
 class Solution {
   public String findDifferentBinaryString(String[] nums) {
-    final int bitSize = nums[0].length();
-    final int maxNum = 1 << bitSize;
-    Set<Integer> numsSet = Arrays.stream(nums)
-                               .mapToInt(num -> Integer.parseInt(num, 2))
-                               .boxed()
-                               .collect(Collectors.toSet());
+    StringBuilder sb = new StringBuilder();
 
-    for (int num = 0; num < maxNum; ++num)
-      if (!numsSet.contains(num))
-        return String.format("%" + bitSize + "s", Integer.toBinaryString(num)).replace(' ', '0');
+    // Flip the i-th bit for each nums[i] so that `ans` is unique.
+    for (int i = 0; i < nums.length; ++i)
+      sb.append(nums[i].charAt(i) == '0' ? '1' : '0');
 
-    throw new IllegalArgumentException();
+    return sb.toString();
   }
 }
