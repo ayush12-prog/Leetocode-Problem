@@ -1,36 +1,52 @@
 class Fancy {
-  
-  public void append(int val) {
-    final long x = (val - b + MOD) % MOD;
-    vals.add(x * modPow(a, MOD - 2) % MOD);
-  }
+    private static final int MOD = 1000000007;
+    private ArrayList<Long> val;  
+    private long a, b;   
 
-  
-  public void addAll(int inc) {
-    b = (b + inc) % MOD;
-  }
+    public Fancy() {
+        val = new ArrayList<>(); 
+        a = 1;
+        b = 0;
+    }
 
-  
-  public void multAll(int m) {
-    a = (a * m) % MOD;
-    b = (b * m) % MOD;
-  }
+    private long modPow(long x, long y, long mod) {
+        long res = 1;
+        x = x % mod;
+        while (y > 0) {
+            if (y % 2 == 1) {
+                res = (res * x) % mod;
+            }
+            y = y / 2;
+            x = (x * x) % mod;
+        }
+        return res;
+    }
 
-  public int getIndex(int idx) {
-    return idx >= vals.size() ? -1 : (int) ((a * vals.get(idx) + b) % MOD);
-  }
+    public void append(int val) {
+        long x = (val - b + MOD) % MOD;
+        this.val.add((x * modPow(a, MOD - 2, MOD)) % MOD);  
+    }
 
-  private static final int MOD = 1_000_000_007;
-  // For each `val` in `vals`, it actually represents a * val + b.
-  private List<Long> vals = new ArrayList<>();
-  private long a = 1;
-  private long b = 0;
+    public void addAll(int inc) {
+        b = (b + inc) % MOD;
+    }
 
-  private int modPow(long x, long n) {
-    if (n == 0)
-      return 1;
-    if (n % 2 == 1)
-      return (int) (x * modPow(x % MOD, (n - 1)) % MOD);
-    return modPow(x * x % MOD, (n / 2)) % MOD;
-  }
+    public void multAll(int m) {
+        a = (a * m) % MOD;
+        b = (b * m) % MOD;
+    }
+
+    public int getIndex(int idx) {
+        if (idx >= val.size()) return -1; 
+        return (int)((a * val.get(idx) + b) % MOD);
+    }
 }
+
+/**
+ * Your Fancy object will be instantiated and called as such:
+ * Fancy obj = new Fancy();
+ * obj.append(val);
+ * obj.addAll(inc);
+ * obj.multAll(m);
+ * int param_4 = obj.getIndex(idx);
+ */
