@@ -1,20 +1,14 @@
-public class Solution {
+class Solution {
     public int reverseDegree(String s) {
-        int result = 0;
-        
+        int sum = 0;
         for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            int reversedAlphabetIndex = 'z' - ch + 1; // Compute reverse position
-            int positionInString = i + 1; // 1-based index
-            result += reversedAlphabetIndex * positionInString;
+            char c = s.charAt(i);
+
+            int reverseValue = 26 - (c - 'a');
+            int position = i + 1;
+
+            sum += reverseValue * position;
         }
-        
-        return result;
-    }
-    
-    public static void main(String[] args) {
-        Solution sol = new Solution();
-        System.out.println(sol.reverseDegree("abc")); // Output: 148
-        System.out.println(sol.reverseDegree("zaza")); // Output: 160
+        return sum;
     }
 }
